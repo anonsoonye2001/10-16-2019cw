@@ -211,3 +211,118 @@ for(i in 1:length(y)){
     d$output=y[i] + x[k]
   }
 }
+
+patch.list=list()
+
+max.brks.index=nrow(brks)
+max=max(brks$no)-1
+
+for(k in brks$no[1]:max){
+  p.mid=in.patch[in.patch$r.index>=brks$r.index[k] &
+                   in.patch$r.index<brks$r.index[k+1],]
+  if(nrow(p.mid)>0){
+    p.mid$patch.id<-k+1
+    patch.list[[k]]<-p.mid
+  }
+}
+
+patch.df=do.cal()
+
+
+
+
+## plotting
+#using ggplot 2
+install.packages("tidyverse")
+library(tidyverse)
+library(ggplot2)
+
+load("fish_data.Rdata")
+
+# Non "ggplot2" 
+fish.deep=fish[fish$deep_fac=="Deep"]
+
+plot(x=fish.deep$parcel.start.lon,
+     y=fish.deep$parcel.start.lat)
+
+
+## Histogram
+hist(log10(fish$parcel.density.m3))
+
+#------
+
+#ggplot2 functions----
+ggplot(data=mpg, aes(x=displ, y=hwy)) +
+  geom_point()
+
+
+
+ggplot(data=mpg, aes(x=displ, y=hwy)) +
+  geom_point(colour="blue")
+
+head(mpg)
+unique(mpg$class)
+
+# assigning colours
+ggplot(data=mpg, aes(x=displ, y=hwy, colour=class)) +
+  geom_point()
+length(unique(mpg$class))
+
+# assigning clours manually
+ggplot(data=mpg, aes(x=displ, y=hwy, colour=class)) +
+  geom_point() +
+  scale_colour_manual(values = c("firebrick","dodgerblue","darkgreen","goldenrod",
+                                 "ivory","chocolate2","deeppink1"))
+
+#ggplot2: line geom-----
+ggplot(data=mpg, aes(x=displ, y=hwy, colour=class)) +
+  geom_line()
+
+ggplot(data=mpg, aes(x=displ, y=hwy, colour=class)) +
+  geom_line() +
+  scale_colour_manual(values = c("firebrick","dodgerblue","darkgreen","goldenrod",
+                                 "ivory","chocolate2","deeppink1"))
+
+# facets----
+ggplot(data=mpg, aes(x=displ, y=hwy)) +
+  geom_line() +
+  facet_wrap(~class)
+
+ggplot(data=mpg, aes(x=displ, y=hwy)) +
+  geom_point() +
+  facet_wrap(~class)
+
+ggplot(data=mpg, aes(x=displ, y=hwy)) +
+  geom_boxplot() +
+  facet_wrap(~class)
+
+ggplot(data=mpg, aes(x=displ, y=hwy)) +
+  geom_point() +
+  facet_wrap(~class, nrow=4)
+
+ggplot(data=mpg, aes(x=displ, y=hwy)) +
+  geom_point() +
+  facet_wrap(~class, ncol=1)
+
+# add a smoother----, lm=linear model
+
+ggplot(data=mpg, aes(x=displ, y=hwy)) +
+  geom_point() +
+  geom_smooth()
+
+ggplot(data=mpg, aes(x=displ, y=hwy)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+#histogram
+
+ggplot(data=mpg, aes(displ, fill=drv)) +
+  geom_histogram(binwidth=0.5) 
+
+
+ggplot(data=mpg, aes(displ, fill=drv)) +
+  geom_freqpoly(binwidth=0.5) 
+
+ggplot(data=mpg, aes(displ, colour=drv)) +
+  geom_freqpoly(binwidth=0.5) 
+
